@@ -124,4 +124,54 @@
       update();
     });
   })();
+
+  // Keep the runner figure's pulling hand locked onto the tendril's visual
+  // tip at any viewport width: both the tendril (full-bleed, aspect-ratio
+  // locked) and the figure (clamp()-sized) scale independently, so the
+  // figure is positioned absolutely each layout pass from the tendril's
+  // measured tip point plus the figure's own hand-anchor fraction.
+  (function alignRunnerToTendril() {
+    var wrap = document.querySelector(".water-sand-edge-wrap");
+    var figure = document.querySelector(".runner-figure");
+    var section = document.querySelector(".runner-transition");
+    if (!wrap || !figure || !section) return;
+
+    // Fraction of the tendril SVG's own box (2026.3 x 807.621) where its
+    // path reaches its deepest/visual tip, nearest the pulling hand.
+    var TIP_X_FRAC = 846.168 / 2026.3;
+    var TIP_Y_FRAC = 788.782 / 807.621;
+
+    // Fraction of the runner figure's own box (483 x 593) where its
+    // fist/hand sits.
+    var HAND_X_FRAC = 471 / 483;
+    var HAND_Y_FRAC = 152 / 593;
+
+    function layout() {
+      var sectionRect = section.getBoundingClientRect();
+      var wrapRect = wrap.getBoundingClientRect();
+
+      var tipX = wrapRect.left - sectionRect.left + TIP_X_FRAC * wrapRect.width;
+      var tipY = wrapRect.top - sectionRect.top + TIP_Y_FRAC * wrapRect.height;
+
+      var vw = window.innerWidth;
+      var figureWidth = Math.min(420, Math.max(220, vw * 0.32));
+      var figureHeight = figureWidth * (593 / 483);
+
+      var figureLeft = tipX - HAND_X_FRAC * figureWidth;
+      var figureTop = tipY - HAND_Y_FRAC * figureHeight;
+
+      figure.style.position = "absolute";
+      figure.style.left = figureLeft + "px";
+      figure.style.top = figureTop + "px";
+      figure.style.width = figureWidth + "px";
+      figure.style.margin = "0";
+
+      var neededHeight = figureTop + figureHeight + 20;
+      section.style.minHeight = Math.max(neededHeight, 60) + "px";
+    }
+
+    layout();
+    window.addEventListener("resize", layout);
+    window.addEventListener("load", layout);
+  })();
 })();
