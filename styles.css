@@ -104,7 +104,10 @@ a { color: inherit; }
   50% { transform: translateY(6px); }
 }
 
-/* ---------- WATER BACKGROUND (CSS approximation of the Figma caustic shader) ---------- */
+/* ---------- WATER BACKGROUND ---------- */
+/* Base is a plain gradient fallback for browsers without WebGPU; when
+   water-shader.js successfully mounts the real Figma caustic shader
+   (WebGPU), it adds .water-bg--gpu and the canvas covers this gradient. */
 .water-bg {
   position: absolute;
   inset: 0;
@@ -114,20 +117,12 @@ a { color: inherit; }
     radial-gradient(ellipse at 50% 0%, var(--water-highlight) 0%, transparent 55%),
     linear-gradient(180deg, var(--water-light) 0%, var(--water-deep) 100%);
 }
-.water-bg::before {
-  content: "";
+.water-canvas {
   position: absolute;
-  inset: -20%;
-  background-image:
-    repeating-linear-gradient(115deg, rgba(255,255,255,0.16) 0px, rgba(255,255,255,0.16) 2px, transparent 2px, transparent 26px),
-    repeating-linear-gradient(65deg, rgba(255,255,255,0.12) 0px, rgba(255,255,255,0.12) 2px, transparent 2px, transparent 34px);
-  mix-blend-mode: screen;
-  animation: caustic-shift 14s linear infinite;
-}
-@keyframes caustic-shift {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  50% { transform: translate(-4%, 3%) rotate(2deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 /* ---------- ABOUT / POSTCARD ---------- */
@@ -196,6 +191,15 @@ a { color: inherit; }
   width: clamp(70px, 9vw, 110px);
 }
 
+.water-sand-edge {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 104%;
+  margin: clamp(-70px, -9vw, -40px) -2% clamp(-55px, -7vw, -28px);
+  pointer-events: none;
+}
+
 /* ---------- RUNNER TRANSITION ---------- */
 .runner-transition {
   position: relative;
@@ -206,17 +210,9 @@ a { color: inherit; }
 .runner-figure {
   position: relative;
   width: clamp(220px, 32vw, 420px);
-  aspect-ratio: 482.5 / 592.3;
   margin: 0 auto 0 clamp(10px, 12vw, 220px);
 }
-.runner-figure img { position: absolute; }
-.runner-silhouette { inset: 0; width: 100%; height: 100%; }
-.runner-jacket {
-  left: 19.77%; top: 4.39%;
-  width: 80.23%; height: auto;
-}
-.runner-shoe-1 { left: 41.51%; top: 93.53%; width: 14.6%; }
-.runner-shoe-2 { left: 76.81%; top: 92.6%; width: 16.25%; }
+.runner-figure img { display: block; width: 100%; height: auto; }
 
 /* ---------- WORKS ---------- */
 .works {
