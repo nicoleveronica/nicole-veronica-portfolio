@@ -195,9 +195,18 @@ a { color: inherit; }
   position: relative;
   z-index: 2;
   display: block;
+  overflow: hidden;
   width: 104%;
+  aspect-ratio: 2026.3 / 807.621;
   margin: clamp(-70px, -9vw, -40px) -2% clamp(-55px, -7vw, -28px);
   pointer-events: none;
+  background: #fff;
+  -webkit-mask-image: url("images/shared/water-sand-edge.svg");
+  mask-image: url("images/shared/water-sand-edge.svg");
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 /* ---------- RUNNER TRANSITION ---------- */

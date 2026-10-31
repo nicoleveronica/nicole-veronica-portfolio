@@ -233,8 +233,12 @@ struct VsOut {
   }
 
   function init() {
-    document.querySelectorAll(".water-bg").forEach(function (el) {
-      mountCausticCanvas(el).then(function (ok) {
+    document.querySelectorAll("[data-caustic]").forEach(function (el) {
+      var opts = {};
+      if (el.hasAttribute("data-caustic-speed")) {
+        opts.speed = parseFloat(el.getAttribute("data-caustic-speed"));
+      }
+      mountCausticCanvas(el, opts).then(function (ok) {
         if (ok) el.classList.add("water-bg--gpu");
       });
     });
