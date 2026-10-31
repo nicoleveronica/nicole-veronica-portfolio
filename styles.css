@@ -125,6 +125,23 @@ a { color: inherit; }
   display: block;
 }
 
+/* One continuous water body spanning the postcard section's rectangle
+   AND the pulled tendril below it, as a single masked/unioned shape so
+   both are driven by one caustic canvas instance (see water-shader.js
+   mountUnionWaterBody). Position/height/mask are set via JS since they
+   depend on the live layout of .about and .water-sand-edge-wrap. */
+.water-body {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 0%, var(--water-highlight) 0%, transparent 35%),
+    linear-gradient(180deg, var(--water-light) 0%, var(--water-deep) 100%);
+}
+
 /* ---------- ABOUT / POSTCARD ---------- */
 .about {
   position: relative;
@@ -200,17 +217,6 @@ a { color: inherit; }
   aspect-ratio: 2026.3 / 807.621;
   margin: clamp(-70px, -9vw, -40px) -2% clamp(-55px, -7vw, -28px);
   pointer-events: none;
-}
-.water-sand-edge {
-  position: absolute;
-  inset: 0;
-  background: var(--water-light);
-  -webkit-mask-image: url("images/shared/water-fill-shape.svg");
-  mask-image: url("images/shared/water-fill-shape.svg");
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
 }
 .water-sand-stroke {
   position: absolute;

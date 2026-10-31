@@ -232,7 +232,73 @@ struct VsOut {
     return true;
   }
 
+  // One continuous water body spanning the postcard section's rectangle
+  // AND the pulled tendril below it: a single element, sized to cover
+  // both, masked by a shape that unions a plain rectangle (the postcard
+  // section's own height) with the tendril's "filled above the curve"
+  // shape — so one caustic canvas instance drives the whole thing with
+  // no seam between the two parts.
+  async function mountUnionWaterBody() {
+    var container = document.querySelector(".water-body");
+    var aboutEl = document.querySelector(".about");
+    var tendrilEl = document.querySelector(".water-sand-edge-wrap");
+    if (!container || !aboutEl || !tendrilEl) return;
+
+    var TENDRIL_W = 2026.3;
+    var TENDRIL_H = 807.621;
+    var curveD = null;
+    try {
+      var res = await fetch("images/shared/water-fill-shape.svg");
+      var text = await res.text();
+      var m = text.match(/<path d="([^"]+)"/);
+      if (m) curveD = m[1];
+    } catch (e) {
+      /* fall through with curveD null */
+    }
+
+    var currentMaskUrl = null;
+
+    function layout() {
+      var aRect = aboutEl.getBoundingClientRect();
+      var tRect = tendrilEl.getBoundingClientRect();
+      var scrollY = window.scrollY;
+      var top = aRect.top + scrollY;
+      var bottom = tRect.bottom + scrollY;
+      container.style.top = top + "px";
+      container.style.height = Math.max(1, bottom - top) + "px";
+
+      if (!curveD) return; // no mask available; container still shows its gradient fallback
+      var aboutH = Math.max(1, aRect.height);
+      var tendrilH = Math.max(1, tRect.height);
+      var rectH = (aboutH / tendrilH) * TENDRIL_H;
+      var totalH = rectH + TENDRIL_H;
+      var svg =
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + TENDRIL_W + " " + totalH + '">' +
+        '<rect x="0" y="0" width="' + TENDRIL_W + '" height="' + rectH + '" fill="white"/>' +
+        '<g transform="translate(0,' + rectH + ')"><path d="' + curveD + '" fill="white"/></g>' +
+        "</svg>";
+      var blob = new Blob([svg], { type: "image/svg+xml" });
+      var url = URL.createObjectURL(blob);
+      var prevUrl = currentMaskUrl;
+      currentMaskUrl = url;
+      container.style.webkitMaskImage = 'url("' + url + '")';
+      container.style.maskImage = 'url("' + url + '")';
+      container.style.webkitMaskSize = "100% 100%";
+      container.style.maskSize = "100% 100%";
+      container.style.webkitMaskRepeat = "no-repeat";
+      container.style.maskRepeat = "no-repeat";
+      if (prevUrl) URL.revokeObjectURL(prevUrl);
+    }
+
+    layout();
+    window.addEventListener("resize", layout);
+
+    var ok = await mountCausticCanvas(container, { speed: 0.6 });
+    if (ok) container.classList.add("water-bg--gpu");
+  }
+
   function init() {
+    mountUnionWaterBody();
     document.querySelectorAll("[data-caustic]").forEach(function (el) {
       var opts = {};
       if (el.hasAttribute("data-caustic-speed")) {
