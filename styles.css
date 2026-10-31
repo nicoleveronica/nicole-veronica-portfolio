@@ -133,33 +133,31 @@ a { color: inherit; }
 }
 .postcard-stage {
   position: relative;
-  max-width: 980px;
+  max-width: 880px;
   margin: 0 auto;
 }
 .starfish-big {
   position: absolute;
-  z-index: 1;
-  width: clamp(130px, 22vw, 230px);
+  z-index: 3;
+  width: 43.04%;
   height: auto;
-  left: clamp(-30px, -4vw, 0px);
-  top: clamp(-50px, -8vw, -20px);
+  left: -10.04%;
+  top: -18.26%;
   filter: drop-shadow(0 14px 18px rgba(0,0,0,0.2));
 }
 .postcard {
   position: relative;
   z-index: 2;
-  margin-left: auto;
-  width: min(100%, 880px);
+  width: 100%;
   background: #fff;
-  padding: clamp(28px, 4vw, 48px) clamp(28px, 5vw, 56px) clamp(60px, 7vw, 90px);
-  border-radius: 4px;
+  padding: clamp(28px, 4vw, 48px) clamp(28px, 5vw, 56px) clamp(60px, 7vw, 90px) clamp(90px, 17.36vw, 160px);
   box-shadow: 0 24px 50px rgba(0,0,0,0.22);
 }
 .postcard::before {
   content: "";
   position: absolute;
-  inset: 10px;
-  border: 7px solid transparent;
+  inset: 0;
+  border: clamp(14px, 2.77vw, 30px) solid transparent;
   border-image: repeating-linear-gradient(-45deg, #c23b3b 0 14px, #fff 14px 28px, #2e6fa8 28px 42px, #fff 42px 56px) 14;
   pointer-events: none;
 }
@@ -186,12 +184,14 @@ a { color: inherit; }
 }
 .postcard-shell {
   position: absolute;
-  bottom: clamp(-30px, -4vw, -14px);
-  right: clamp(-24px, -4vw, 6px);
-  width: clamp(70px, 9vw, 110px);
+  left: 91.27%;
+  top: 65.05%;
+  width: 33.34%;
+  height: auto;
+  filter: drop-shadow(0 8px 10px rgba(0,0,0,0.15));
 }
 
-.water-sand-edge {
+.water-sand-edge-wrap {
   position: relative;
   z-index: 2;
   display: block;
@@ -200,13 +200,23 @@ a { color: inherit; }
   aspect-ratio: 2026.3 / 807.621;
   margin: clamp(-70px, -9vw, -40px) -2% clamp(-55px, -7vw, -28px);
   pointer-events: none;
-  background: #fff;
-  -webkit-mask-image: url("images/shared/water-sand-edge.svg");
-  mask-image: url("images/shared/water-sand-edge.svg");
+}
+.water-sand-edge {
+  position: absolute;
+  inset: 0;
+  background: var(--water-light);
+  -webkit-mask-image: url("images/shared/water-fill-shape.svg");
+  mask-image: url("images/shared/water-fill-shape.svg");
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
+}
+.water-sand-stroke {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 /* ---------- RUNNER TRANSITION ---------- */
@@ -265,7 +275,5 @@ a { color: inherit; }
 
 @media (max-width: 760px) {
   .works-grid { grid-template-columns: 1fr; }
-  .postcard { margin-left: 0; margin-top: 60px; }
-  .starfish-big { left: 0; top: -40px; }
   .runner-figure { margin-left: auto; margin-right: auto; }
 }
