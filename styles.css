@@ -218,7 +218,7 @@ a { color: inherit; }
   overflow: hidden;
   width: 100%;
   aspect-ratio: 2026.3 / 807.621;
-  margin: clamp(-70px, -9vw, -40px) 0 clamp(-55px, -7vw, -28px);
+  margin: clamp(-70px, -9vw, -40px) 0 clamp(20px, 6vw, 100px);
   pointer-events: none;
 }
 .water-sand-stroke {
@@ -227,19 +227,6 @@ a { color: inherit; }
   width: 100%;
   height: 100%;
 }
-
-/* ---------- RUNNER TRANSITION ---------- */
-.runner-transition {
-  position: relative;
-  background: var(--cream);
-  padding: 10px 24px clamp(40px, 8vw, 100px);
-}
-.runner-figure {
-  position: relative;
-  width: clamp(220px, 32vw, 420px);
-  margin: 0 auto 0 clamp(10px, 12vw, 220px);
-}
-.runner-figure img { display: block; width: 100%; height: auto; }
 
 /* ---------- WORKS ---------- */
 .works {
@@ -283,5 +270,4 @@ a { color: inherit; }
 
 @media (max-width: 760px) {
   .works-grid { grid-template-columns: 1fr; }
-  .runner-figure { margin-left: auto; margin-right: auto; }
 }
