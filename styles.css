@@ -58,7 +58,22 @@ a { color: inherit; }
   overflow: hidden;
   padding-bottom: clamp(40px, 6vw, 90px);
 }
-.hero-clouds { position: absolute; inset: 0; pointer-events: none; }
+.hero-water {
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 42%;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 0%, var(--water-highlight) 0%, transparent 35%),
+    linear-gradient(180deg, var(--water-light) 0%, var(--water-deep) 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 48%, #000 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 48%, #000 100%);
+}
+.hero-clouds { position: absolute; z-index: 0; inset: 0; pointer-events: none; }
 .cloud { position: absolute; width: clamp(160px, 22vw, 420px); opacity: 0.9; }
 .cloud-a { left: 6%; top: 34%; }
 .cloud-b { left: -10%; top: 12%; width: clamp(140px, 18vw, 340px); }
