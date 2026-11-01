@@ -150,16 +150,16 @@ a { color: inherit; }
 }
 .postcard-stage {
   position: relative;
-  max-width: 880px;
+  width: clamp(260px, 56.24vw, 1080px);
   margin: 0 auto;
 }
 .starfish-big {
   position: absolute;
   z-index: 3;
-  width: 32%;
+  width: 31%;
   height: auto;
-  left: -4.5%;
-  top: -12.7%;
+  left: -20%;
+  top: -7%;
   filter: drop-shadow(0 14px 18px rgba(0,0,0,0.2));
 }
 .postcard {
@@ -203,8 +203,9 @@ a { color: inherit; }
 }
 .postcard-shell {
   position: absolute;
-  left: 95.4%;
-  top: 69.2%;
+  z-index: 3;
+  right: -16%;
+  bottom: -6%;
   width: 25%;
   height: auto;
   filter: drop-shadow(0 8px 10px rgba(0,0,0,0.15));

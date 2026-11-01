@@ -273,7 +273,7 @@ struct VsOut {
       var rectH = (aboutH / tendrilH) * TENDRIL_H;
       var totalH = rectH + TENDRIL_H;
       var svg =
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + TENDRIL_W + " " + totalH + '">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 ' + TENDRIL_W + " " + totalH + '">' +
         '<rect x="0" y="0" width="' + TENDRIL_W + '" height="' + rectH + '" fill="white"/>' +
         '<g transform="translate(0,' + rectH + ')"><path d="' + curveD + '" fill="white"/></g>' +
         "</svg>";
