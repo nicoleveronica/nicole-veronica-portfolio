@@ -283,18 +283,25 @@ struct VsOut {
       var svgPerPx = TENDRIL_H / tendrilH;
       var fadeH = fadeDistance * svgPerPx;
       var aboutH = Math.max(1, aRect.height) * svgPerPx;
-      var fadeSolidY = fadeH * HERO_FADE_SOLID_AT;
-      var totalH = fadeH + aboutH + TENDRIL_H;
+      // The fade and the solid section below it are one continuous rect
+      // sharing a single gradient fill (rather than two abutting shapes)
+      // so there's no seam between them — adjacent SVG shapes can leave a
+      // faint anti-aliasing line where their edges meet at a non-integer
+      // pixel row. The rect also overlaps a few units into the curve
+      // below it for the same reason: both are fully opaque white there,
+      // so the overlap is invisible but removes that seam too.
+      var solidH = fadeH + aboutH;
+      var overlap = Math.max(2, TENDRIL_H * 0.004);
+      var totalH = solidH + TENDRIL_H;
       var svg =
         '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 ' + TENDRIL_W + " " + totalH + '">' +
         '<defs><linearGradient id="f" x1="0" y1="0" x2="0" y2="1">' +
         '<stop offset="0" stop-color="#fff" stop-opacity="0"/>' +
-        '<stop offset="' + (fadeH ? fadeSolidY / fadeH : 1) + '" stop-color="#fff" stop-opacity="1"/>' +
+        '<stop offset="' + (solidH ? (fadeH * HERO_FADE_SOLID_AT) / solidH : 1) + '" stop-color="#fff" stop-opacity="1"/>' +
         '<stop offset="1" stop-color="#fff" stop-opacity="1"/>' +
         "</linearGradient></defs>" +
-        '<rect x="0" y="0" width="' + TENDRIL_W + '" height="' + fadeH + '" fill="url(#f)"/>' +
-        '<rect x="0" y="' + fadeH + '" width="' + TENDRIL_W + '" height="' + aboutH + '" fill="#fff"/>' +
-        '<g transform="translate(0,' + (fadeH + aboutH) + ')"><path d="' + curveD + '" fill="#fff"/></g>' +
+        '<rect x="0" y="0" width="' + TENDRIL_W + '" height="' + (solidH + overlap) + '" fill="url(#f)"/>' +
+        '<g transform="translate(0,' + solidH + ')"><path d="' + curveD + '" fill="#fff"/></g>' +
         "</svg>";
       var blob = new Blob([svg], { type: "image/svg+xml" });
       var url = URL.createObjectURL(blob);
