@@ -232,20 +232,28 @@ struct VsOut {
     return true;
   }
 
-  // One continuous water body spanning the postcard section's rectangle
-  // AND the pulled tendril below it: a single element, sized to cover
-  // both, masked by a shape that unions a plain rectangle (the postcard
-  // section's own height) with the tendril's "filled above the curve"
-  // shape — so one caustic canvas instance drives the whole thing with
-  // no seam between the two parts.
-  async function mountUnionWaterBody() {
-    var container = document.querySelector(".water-body");
+  // The whole sea as ONE continuous shape and ONE canvas, from a soft
+  // fade-in behind the hero caricature, through the postcard section,
+  // out through the pulled tendril's wavy edge. The mask stacks three
+  // pieces in the tendril's own coordinate space: a gradient-fade rect
+  // (the hero fade), a plain rect (the postcard section), and the
+  // tendril's "filled above the curve" shape — so no seam shows
+  // anywhere along the whole run.
+  async function mountSea() {
+    var container = document.querySelector(".sea");
+    var heroEl = document.querySelector(".hero");
     var aboutEl = document.querySelector(".about");
     var tendrilEl = document.querySelector(".water-sand-edge-wrap");
-    if (!container || !aboutEl || !tendrilEl) return;
+    if (!container || !heroEl || !aboutEl || !tendrilEl) return;
 
-    var TENDRIL_W = 2026.3;
-    var TENDRIL_H = 807.621;
+    // Fraction of the hero's own height, counting up from its bottom
+    // edge, where the sea fade begins (measured off the Figma export).
+    var HERO_FADE_FRACTION = 0.42;
+    // How much of that fade band is the actual fade (the rest is solid).
+    var HERO_FADE_SOLID_AT = 0.48;
+
+    var TENDRIL_W = 1998.95;
+    var TENDRIL_H = 689.712;
     var curveD = null;
     try {
       var res = await fetch("images/shared/water-fill-shape.svg");
@@ -259,23 +267,34 @@ struct VsOut {
     var currentMaskUrl = null;
 
     function layout() {
+      var hRect = heroEl.getBoundingClientRect();
       var aRect = aboutEl.getBoundingClientRect();
       var tRect = tendrilEl.getBoundingClientRect();
       var scrollY = window.scrollY;
-      var top = aRect.top + scrollY;
+
+      var fadeDistance = HERO_FADE_FRACTION * hRect.height;
+      var top = hRect.bottom + scrollY - fadeDistance;
       var bottom = tRect.bottom + scrollY;
       container.style.top = top + "px";
       container.style.height = Math.max(1, bottom - top) + "px";
 
       if (!curveD) return; // no mask available; container still shows its gradient fallback
-      var aboutH = Math.max(1, aRect.height);
       var tendrilH = Math.max(1, tRect.height);
-      var rectH = (aboutH / tendrilH) * TENDRIL_H;
-      var totalH = rectH + TENDRIL_H;
+      var svgPerPx = TENDRIL_H / tendrilH;
+      var fadeH = fadeDistance * svgPerPx;
+      var aboutH = Math.max(1, aRect.height) * svgPerPx;
+      var fadeSolidY = fadeH * HERO_FADE_SOLID_AT;
+      var totalH = fadeH + aboutH + TENDRIL_H;
       var svg =
         '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 ' + TENDRIL_W + " " + totalH + '">' +
-        '<rect x="0" y="0" width="' + TENDRIL_W + '" height="' + rectH + '" fill="white"/>' +
-        '<g transform="translate(0,' + rectH + ')"><path d="' + curveD + '" fill="white"/></g>' +
+        '<defs><linearGradient id="f" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0" stop-color="#fff" stop-opacity="0"/>' +
+        '<stop offset="' + (fadeH ? fadeSolidY / fadeH : 1) + '" stop-color="#fff" stop-opacity="1"/>' +
+        '<stop offset="1" stop-color="#fff" stop-opacity="1"/>' +
+        "</linearGradient></defs>" +
+        '<rect x="0" y="0" width="' + TENDRIL_W + '" height="' + fadeH + '" fill="url(#f)"/>' +
+        '<rect x="0" y="' + fadeH + '" width="' + TENDRIL_W + '" height="' + aboutH + '" fill="#fff"/>' +
+        '<g transform="translate(0,' + (fadeH + aboutH) + ')"><path d="' + curveD + '" fill="#fff"/></g>' +
         "</svg>";
       var blob = new Blob([svg], { type: "image/svg+xml" });
       var url = URL.createObjectURL(blob);
@@ -298,7 +317,7 @@ struct VsOut {
   }
 
   function init() {
-    mountUnionWaterBody();
+    mountSea();
     document.querySelectorAll("[data-caustic]").forEach(function (el) {
       var opts = {};
       if (el.hasAttribute("data-caustic-speed")) {

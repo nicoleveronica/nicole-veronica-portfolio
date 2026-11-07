@@ -10,14 +10,31 @@
     if (!eyeLeft || !eyeRight || reduceMotion) return;
 
     var maxOffset = 7; // in SVG viewBox units
+    var eyes = [eyeLeft, eyeRight];
+    var centers = null;
+
+    // getBoundingClientRect() reflects the eye's CURRENT transform, so
+    // measuring it on every mousemove (as the eye is already offset from
+    // a previous move) feeds that offset back into the next center
+    // calculation. Each eye sits at a different angle/distance from the
+    // cursor, so that feedback loop converges differently per eye —
+    // which read as the right eye being "more responsive" than the left.
+    // Measuring each eye's resting center once (transform reset to none)
+    // removes the feedback entirely.
+    function measureCenters() {
+      eyes.forEach(function (eye) { eye.style.transform = "translate(0px, 0px)"; });
+      centers = eyes.map(function (eye) {
+        var rect = eye.getBoundingClientRect();
+        return { cx: rect.left + rect.width / 2, cy: rect.top + rect.height / 2 };
+      });
+    }
 
     function moveEyes(clientX, clientY) {
-      [eyeLeft, eyeRight].forEach(function (eye) {
-        var rect = eye.getBoundingClientRect();
-        var cx = rect.left + rect.width / 2;
-        var cy = rect.top + rect.height / 2;
-        var dx = clientX - cx;
-        var dy = clientY - cy;
+      if (!centers) measureCenters();
+      eyes.forEach(function (eye, i) {
+        var c = centers[i];
+        var dx = clientX - c.cx;
+        var dy = clientY - c.cy;
         var angle = Math.atan2(dy, dx);
         var dist = Math.min(maxOffset, Math.hypot(dx, dy) / 20);
         var ox = Math.cos(angle) * dist;
@@ -26,12 +43,14 @@
       });
     }
 
+    measureCenters();
     document.addEventListener("mousemove", function (e) {
       moveEyes(e.clientX, e.clientY);
     });
     document.addEventListener("touchmove", function (e) {
       if (e.touches && e.touches[0]) moveEyes(e.touches[0].clientX, e.touches[0].clientY);
     }, { passive: true });
+    window.addEventListener("resize", measureCenters);
   })();
 
   /* ---------- Scroll morph: cheek stars -> postcard starfish ---------- */
