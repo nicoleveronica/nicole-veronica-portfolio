@@ -14,7 +14,7 @@
     // units — unaffected by CSS transforms or screen scaling), so the
     // motion stays visually inside the eye regardless of its rendered
     // size instead of using one fixed unit count tuned for a single size.
-    var MAX_OFFSET_FRACTION = 0.45;
+    var MAX_OFFSET_FRACTION = 0.3;
     var eyes = [eyeLeft, eyeRight];
     var centers = null;
 
