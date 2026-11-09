@@ -264,9 +264,18 @@ a { color: inherit; }
   pointer-events: none;
 }
 .water-sand-stroke {
+  /* The source SVG's drawn curve only covers its original 0-1998.95
+     unit span; a 150-unit blank margin was added past that so the
+     stroke's rounded end-cap (visible as an abrupt "cut off" blob
+     right at the frame edge) sits off-screen instead. Stretching the
+     image to 107.51% (2148.95/1998.95) while keeping left:0 maps that
+     original 0-1998.95 span back onto exactly 0%-100% of the wrap, so
+     nothing about the visible portion changes — only the now-hidden
+     overflow past 100% does. */
   position: absolute;
-  inset: 0;
-  width: 100%;
+  left: 0;
+  top: 0;
+  width: 107.51%;
   height: 100%;
 }
 
