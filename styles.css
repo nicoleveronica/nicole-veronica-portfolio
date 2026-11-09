@@ -353,8 +353,9 @@ a { color: inherit; }
 
 /* ---------- FISHING (closing illustration) ---------- */
 .fishing {
+  --ground-h: clamp(120px, 21vw, 270px);
   position: relative;
-  padding: clamp(20px, 4vw, 48px) clamp(24px, 6vw, 80px) clamp(40px, 7vw, 90px);
+  padding: clamp(20px, 4vw, 48px) clamp(24px, 6vw, 80px) var(--ground-h);
 }
 .fishing-illustration {
   position: relative;
@@ -378,7 +379,7 @@ a { color: inherit; }
   width: 100%;
   bottom: 0;
   z-index: 0;
-  height: calc(clamp(40px, 7vw, 90px) + 24px);
+  height: calc(var(--ground-h) + 24px);
   background: linear-gradient(180deg, var(--ground-brown) 0%, var(--ground-brown-deep) 100%);
 }
 
