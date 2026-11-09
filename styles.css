@@ -354,17 +354,31 @@ a { color: inherit; }
 /* ---------- FISHING (closing illustration) ---------- */
 .fishing {
   position: relative;
-  padding: clamp(20px, 4vw, 48px) clamp(24px, 6vw, 80px) 0;
+  padding: clamp(20px, 4vw, 48px) clamp(24px, 6vw, 80px) clamp(40px, 7vw, 90px);
 }
 .fishing-illustration {
+  position: relative;
+  z-index: 1;
   display: block;
   width: min(100%, 620px);
   margin: 0 auto;
   height: auto;
 }
+/* Pinned to the section's own bottom edge and left/width:100% of it,
+   so it spans the full screen width regardless of .fishing's side
+   padding (its containing block is .fishing's padding box, which
+   reaches edge to edge). Taller than the reserved padding-bottom by
+   the overlap amount, so that extra height reaches up behind the
+   illustration's lower edge instead of leaving a gap above it; the
+   illustration keeps a higher z-index so her feet stay drawn on top
+   of the ground rather than behind it. */
 .fishing-ground {
-  height: clamp(40px, 7vw, 90px);
-  margin-top: clamp(20px, 4vw, 48px);
+  position: absolute;
+  left: 0;
+  width: 100%;
+  bottom: 0;
+  z-index: 0;
+  height: calc(clamp(40px, 7vw, 90px) + 24px);
   background: linear-gradient(180deg, var(--ground-brown) 0%, var(--ground-brown-deep) 100%);
 }
 
