@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&display=swap" rel="stylesheet">
 <!-- Bump the ?v= below whenever styles.css/water-shader.js/script.js change — browsers (esp. over plain http.server, which sends no cache-control headers) otherwise keep serving a stale cached copy after a deploy. -->
-<link rel="stylesheet" href="styles.css?v=20261109s">
+<link rel="stylesheet" href="styles.css?v=20261109t">
 </head>
 <body>
 
@@ -104,6 +104,18 @@
      .sea-stroke below. -->
 <div class="water-sand-edge-wrap" aria-hidden="true"></div>
 
+<section class="letter" id="letter">
+  <p class="letter-text">
+    Hello,<br>
+    Mock letters,<br>
+    I don't know what to say here<br>
+    yet mock letters, I don't know<br>
+    what to say here yet heheheheh
+  </p>
+  <!-- Beach towels go here once the real SVGs are in — same slow
+       left-drift as .cloud, dropped in as their own scroll track. -->
+</section>
+
 <section class="works" id="works">
   <div class="water-bg" data-caustic aria-hidden="true"></div>
   <div class="ocean-edge ocean-edge--top" aria-hidden="true"></div>
@@ -117,6 +129,14 @@
     <a class="work-card" href="#"><div class="work-thumb"></div></a>
   </div>
   <div class="ocean-edge ocean-edge--bottom" aria-hidden="true"></div>
+</section>
+
+<section class="fishing" id="fishing">
+  <img class="fishing-illustration" src="images/fishing/girl-fishing-bottle.jpg" alt="Illustration of Nicole reeling in a message in a bottle">
+  <!-- The bottle isn't a separate element yet — once it needs to open a
+       popup, give it its own <button> positioned over the bottle instead
+       of making the whole illustration clickable. -->
+  <div class="fishing-ground" aria-hidden="true"></div>
 </section>
 
 <div class="grain-overlay" aria-hidden="true"></div>
