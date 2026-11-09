@@ -241,10 +241,11 @@ struct VsOut {
   // anywhere along the whole run.
   async function mountSea() {
     var container = document.querySelector(".sea");
+    var strokeContainer = document.querySelector(".sea-stroke");
     var heroEl = document.querySelector(".hero");
     var aboutEl = document.querySelector(".about");
     var tendrilEl = document.querySelector(".water-sand-edge-wrap");
-    if (!container || !heroEl || !aboutEl || !tendrilEl) return;
+    if (!container || !strokeContainer || !heroEl || !aboutEl || !tendrilEl) return;
 
     // Fraction of the hero's own height, counting up from its bottom
     // edge, where the sea fade begins (measured off the Figma export).
@@ -267,7 +268,22 @@ struct VsOut {
       /* fall through with curveD null */
     }
 
+    // The raw, unclosed torn-paper line (not the closed fill shape above)
+    // — this is what gets drawn as a visible stroke rather than used as
+    // a mask, so it must be the open path, not water-fill-shape.svg's
+    // closed-for-filling version.
+    var strokeD = null;
+    try {
+      var sres = await fetch("images/shared/water-sand-edge.svg?v=20261109c");
+      var stext = await sres.text();
+      var sm = stext.match(/<path d="([^"]+)"/);
+      if (sm) strokeD = sm[1];
+    } catch (e) {
+      /* fall through with strokeD null */
+    }
+
     var currentMaskUrl = null;
+    var currentStrokeUrl = null;
 
     function layout() {
       var hRect = heroEl.getBoundingClientRect();
@@ -280,6 +296,11 @@ struct VsOut {
       var bottom = tRect.bottom + scrollY;
       container.style.top = top + "px";
       container.style.height = Math.max(1, bottom - top) + "px";
+      // Identical top/height to the mask container, so the stroke (drawn
+      // from the same path data, in the same coordinate space, further
+      // below) can only ever land exactly on the mask's own cutout edge.
+      strokeContainer.style.top = top + "px";
+      strokeContainer.style.height = Math.max(1, bottom - top) + "px";
 
       if (!curveD) return; // no mask available; container still shows its gradient fallback
       var tendrilH = Math.max(1, tRect.height);
@@ -317,6 +338,29 @@ struct VsOut {
       container.style.webkitMaskRepeat = "no-repeat";
       container.style.maskRepeat = "no-repeat";
       if (prevUrl) URL.revokeObjectURL(prevUrl);
+
+      if (strokeD) {
+        // Same viewBox/totalH and the same translate(0, solidH) as the
+        // mask's curve above, so this draws on top of exactly where the
+        // mask's own cutout edge falls — not a separately-sized asset
+        // that merely approximates it.
+        var strokeSvg =
+          '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 ' + TENDRIL_W + " " + totalH + '">' +
+          '<defs><filter id="torn" x="-9.53674e-07" y="0" width="' + TENDRIL_W + '" height="' + TENDRIL_H + '" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">' +
+          '<feTurbulence type="fractalNoise" baseFrequency="0.25 0.25" numOctaves="3" seed="2782"/>' +
+          '<feDisplacementMap in="SourceGraphic" scale="12" xChannelSelector="R" yChannelSelector="G"/>' +
+          "</filter></defs>" +
+          '<g transform="translate(0,' + solidH + ')"><path d="' + strokeD + '" fill="none" stroke="#fff" stroke-width="36" filter="url(#torn)"/></g>' +
+          "</svg>";
+        var strokeBlob = new Blob([strokeSvg], { type: "image/svg+xml" });
+        var strokeUrl = URL.createObjectURL(strokeBlob);
+        var prevStrokeUrl = currentStrokeUrl;
+        currentStrokeUrl = strokeUrl;
+        strokeContainer.style.backgroundImage = 'url("' + strokeUrl + '")';
+        strokeContainer.style.backgroundSize = "100% 100%";
+        strokeContainer.style.backgroundRepeat = "no-repeat";
+        if (prevStrokeUrl) URL.revokeObjectURL(prevStrokeUrl);
+      }
     }
 
     layout();

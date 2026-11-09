@@ -263,23 +263,17 @@ a { color: inherit; }
   margin: clamp(-70px, -9vw, -40px) 0 clamp(20px, 6vw, 100px);
   pointer-events: none;
 }
-.water-sand-stroke {
-  /* water-sand-edge-stroke.png is a pre-rendered raster crop whose
-     torn-paper line already runs flush to both edges (cut off by the
-     crop boundary, not a rounded stroke end), unlike the vector
-     version's drawn curve which stopped short of the frame — so no
-     width/overflow trickery is needed here, just a plain stretch to
-     fill the wrap. max-width:none overrides the global
-     `img { max-width: 100% }` reset, which would otherwise be a no-op
-     here anyway since this is already exactly 100%, but is kept for
-     safety since object-fit:fill on a differently-proportioned image
-     still relies on both width and height being the real used values. */
+/* The white torn-paper line is drawn from the exact same path data and
+   the exact same computed top/height/scale as the .sea mask itself
+   (see mountSea in water-shader.js), instead of being a separately
+   sized/positioned image — so it is geometrically guaranteed to sit
+   on the mask's cutout edge, rather than merely matching it closely. */
+.sea-stroke {
   position: absolute;
-  top: 0;
   left: 0;
   width: 100%;
-  max-width: none;
-  height: 100%;
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* ---------- WORKS ---------- */

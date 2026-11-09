@@ -9,11 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&display=swap" rel="stylesheet">
 <!-- Bump the ?v= below whenever styles.css/water-shader.js/script.js change — browsers (esp. over plain http.server, which sends no cache-control headers) otherwise keep serving a stale cached copy after a deploy. -->
-<link rel="stylesheet" href="styles.css?v=20261109j">
+<link rel="stylesheet" href="styles.css?v=20261109k">
 </head>
 <body>
 
 <div class="sea" aria-hidden="true"></div>
+<div class="sea-stroke" aria-hidden="true"></div>
 
 <nav class="nav">
   <div class="nav-name">Nicole Veronica</div>
@@ -99,9 +100,11 @@
   </div>
 </section>
 
-<div class="water-sand-edge-wrap" aria-hidden="true">
-  <img class="water-sand-stroke" src="images/shared/water-sand-edge-stroke.png" alt="">
-</div>
+<!-- Kept empty: its aspect-ratio-locked box still reserves the layout
+     space the tendril needs, and water-shader.js measures it to scale
+     the sea mask/stroke — but it no longer holds its own image, see
+     .sea-stroke below. -->
+<div class="water-sand-edge-wrap" aria-hidden="true"></div>
 
 <section class="works" id="works">
   <div class="water-bg" data-caustic aria-hidden="true"></div>
@@ -116,7 +119,7 @@
   </div>
 </section>
 
-<script src="water-shader.js?v=20261109b"></script>
+<script src="water-shader.js?v=20261109c"></script>
 <script src="script.js?v=20261109"></script>
 </body>
 </html>
