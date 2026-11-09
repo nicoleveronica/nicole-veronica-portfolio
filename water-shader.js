@@ -256,7 +256,10 @@ struct VsOut {
     var TENDRIL_H = 689.712;
     var curveD = null;
     try {
-      var res = await fetch("images/shared/water-fill-shape.svg");
+      // ?v= bump this whenever water-fill-shape.svg's content changes — fetch()
+      // isn't covered by index.html's own asset-versioning, and this file is
+      // cached like any other static asset.
+      var res = await fetch("images/shared/water-fill-shape.svg?v=20261109b");
       var text = await res.text();
       var m = text.match(/<path d="([^"]+)"/);
       if (m) curveD = m[1];
