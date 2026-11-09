@@ -263,7 +263,7 @@ a { color: inherit; }
 .works {
   position: relative;
   overflow: hidden;
-  padding: clamp(60px, 9vw, 120px) 24px clamp(80px, 10vw, 140px);
+  padding: clamp(60px, 9vw, 120px) clamp(24px, 6vw, 80px) clamp(80px, 10vw, 140px);
 }
 .works-title {
   position: relative;
