@@ -67,4 +67,51 @@
     window.addEventListener("resize", measureCenters);
   })();
 
+  /* ---------- Message-in-a-bottle popup ---------- */
+  (function bottlePopup() {
+    var trigger = document.querySelector(".bottle-trigger");
+    var modal = document.getElementById("bottleModal");
+    var animEl = document.getElementById("bottleAnim");
+    var closeTargets = modal ? modal.querySelectorAll("[data-bottle-close]") : [];
+    if (!trigger || !modal || !animEl || typeof lottie === "undefined") return;
+
+    var anim = lottie.loadAnimation({
+      container: animEl,
+      renderer: "svg",
+      loop: false,
+      autoplay: false,
+      path: "images/fishing/bottle-unroll.json",
+    });
+
+    var lastFocused = null;
+
+    function onKeydown(e) {
+      if (e.key === "Escape") closeModal();
+    }
+
+    function openModal() {
+      lastFocused = document.activeElement;
+      modal.classList.add("is-open");
+      if (reduceMotion) {
+        anim.goToAndStop(anim.totalFrames - 1, true);
+      } else {
+        anim.goToAndPlay(0, true);
+      }
+      document.addEventListener("keydown", onKeydown);
+      var closeBtn = modal.querySelector(".bottle-modal-close");
+      if (closeBtn) closeBtn.focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove("is-open");
+      document.removeEventListener("keydown", onKeydown);
+      if (lastFocused && lastFocused.focus) lastFocused.focus();
+    }
+
+    trigger.addEventListener("click", openModal);
+    closeTargets.forEach(function (el) {
+      el.addEventListener("click", closeModal);
+    });
+  })();
+
 })();
