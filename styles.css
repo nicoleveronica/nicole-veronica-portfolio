@@ -63,7 +63,7 @@ a { color: inherit; }
   position: absolute;
   width: clamp(160px, 22vw, 420px);
   opacity: 0.9;
-  animation: cloud-drift 140s linear infinite;
+  animation: cloud-drift 200s linear infinite;
 }
 /* All clouds share one base anchor (left:0) and the same speed, so the
    only thing that sets each cloud's horizontal position is its
@@ -73,25 +73,32 @@ a { color: inherit; }
    apart forever instead of just at one moment. Clouds are grouped into
    three vertical lanes (top bands) far enough apart that even the
    widest cloud can't reach from one lane into the next, so lanes don't
-   need to coordinate with each other at all. */
+   need to coordinate with each other at all. Each lane's 3 clouds sit
+   at phases 0, 1/3 and 2/3 of the cycle (offset per lane for variety),
+   evenly spacing them along the whole path. */
 /* All three lanes stay well above where the sea fade begins (~58% down
    the hero, see HERO_FADE_FRACTION in water-shader.js) so clouds never
    dip into the water. */
 .cloud-c { left: 0; top: 4%; width: clamp(200px, 28vw, 560px); animation-delay: 0s; }
-.cloud-e { left: 0; top: 7%; width: clamp(170px, 24vw, 460px); animation-delay: -70s; }
+.cloud-e { left: 0; top: 6%; width: clamp(170px, 24vw, 460px); animation-delay: -66.7s; }
+.cloud-h { left: 0; top: 8%; width: clamp(150px, 20vw, 380px); opacity: 0.85; animation-delay: -133.3s; }
 
-.cloud-a { left: 0; top: 20%; animation-delay: -35s; }
-.cloud-b { left: 0; top: 23%; width: clamp(140px, 18vw, 340px); animation-delay: -105s; }
+.cloud-a { left: 0; top: 20%; animation-delay: -22.2s; }
+.cloud-b { left: 0; top: 22%; width: clamp(140px, 18vw, 340px); animation-delay: -88.9s; }
+.cloud-i { left: 0; top: 24%; width: clamp(130px, 17vw, 300px); opacity: 0.8; animation-delay: -155.6s; }
 
-.cloud-d { left: 0; top: 36%; width: clamp(120px, 16vw, 300px); opacity: 0.75; animation-delay: -21s; }
-.cloud-f { left: 0; top: 39%; width: clamp(110px, 15vw, 260px); opacity: 0.7; animation-delay: -68s; }
-.cloud-g { left: 0; top: 42%; width: clamp(130px, 17vw, 320px); opacity: 0.8; animation-delay: -114s; }
+.cloud-d { left: 0; top: 36%; width: clamp(120px, 16vw, 300px); opacity: 0.75; animation-delay: -44.4s; }
+.cloud-f { left: 0; top: 39%; width: clamp(110px, 15vw, 260px); opacity: 0.7; animation-delay: -111.1s; }
+.cloud-g { left: 0; top: 42%; width: clamp(130px, 17vw, 320px); opacity: 0.8; animation-delay: -177.8s; }
 
 /* Each cloud drifts from well off-screen right to well off-screen left,
    so the jump back to the start of the loop happens while it's already
-   invisible — reads as a continuous drift that wraps in from the right. */
+   invisible — reads as a continuous drift that wraps in from the right.
+   0% must clear the viewport's right edge (100vw) by more than a
+   cloud's own width, otherwise it starts already visible mid-screen
+   instead of entering from the right. */
 @keyframes cloud-drift {
-  0% { transform: translateX(35vw); }
+  0% { transform: translateX(115vw); }
   100% { transform: translateX(-135vw); }
 }
 @media (prefers-reduced-motion: reduce) {
