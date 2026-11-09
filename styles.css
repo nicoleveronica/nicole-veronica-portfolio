@@ -264,25 +264,20 @@ a { color: inherit; }
   pointer-events: none;
 }
 .water-sand-stroke {
-  /* The source SVG's drawn curve only covers its original 0-1998.95
-     unit span; a 150-unit blank margin was added past that so the
-     stroke's rounded end-cap (visible as an abrupt "cut off" blob
-     right at the frame edge) sits off-screen instead. Stretching the
-     image to 107.5043% (2148.95/1998.95) while keeping left:0 maps
-     that original 0-1998.95 span back onto exactly 0%-100% of the
-     wrap, so nothing about the visible portion changes — only the
-     now-hidden overflow past 100% does.
-     max-width:none overrides the global `img { max-width: 100% }`
-     reset — without it, the 107.5% width silently gets clamped back
-     to 100%, which squeezes the whole wider image (including the
-     originally-visible portion) into the old space and throws off
-     alignment with the water mask across the entire curve, not just
-     at the edge. (Learned this the hard way — shipped once without
-     the override and had to revert.) */
+  /* water-sand-edge-stroke.png is a pre-rendered raster crop whose
+     torn-paper line already runs flush to both edges (cut off by the
+     crop boundary, not a rounded stroke end), unlike the vector
+     version's drawn curve which stopped short of the frame — so no
+     width/overflow trickery is needed here, just a plain stretch to
+     fill the wrap. max-width:none overrides the global
+     `img { max-width: 100% }` reset, which would otherwise be a no-op
+     here anyway since this is already exactly 100%, but is kept for
+     safety since object-fit:fill on a differently-proportioned image
+     still relies on both width and height being the real used values. */
   position: absolute;
   top: 0;
   left: 0;
-  width: 107.5043%;
+  width: 100%;
   max-width: none;
   height: 100%;
 }
