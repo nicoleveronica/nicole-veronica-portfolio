@@ -59,10 +59,26 @@ a { color: inherit; }
   padding-bottom: clamp(40px, 6vw, 90px);
 }
 .hero-clouds { position: absolute; z-index: 0; inset: 0; pointer-events: none; }
-.cloud { position: absolute; width: clamp(160px, 22vw, 420px); opacity: 0.9; }
-.cloud-a { left: 6%; top: 34%; }
-.cloud-b { left: -10%; top: 12%; width: clamp(140px, 18vw, 340px); }
-.cloud-c { right: -4%; top: 18%; width: clamp(200px, 28vw, 560px); }
+.cloud {
+  position: absolute;
+  width: clamp(160px, 22vw, 420px);
+  opacity: 0.9;
+  animation: cloud-drift 110s linear infinite;
+}
+.cloud-a { left: 6%; top: 34%; animation-duration: 110s; }
+.cloud-b { left: -10%; top: 12%; width: clamp(140px, 18vw, 340px); animation-duration: 140s; animation-delay: -35s; }
+.cloud-c { right: -4%; top: 18%; width: clamp(200px, 28vw, 560px); animation-duration: 170s; animation-delay: -90s; }
+
+/* Each cloud drifts from well off-screen right to well off-screen left,
+   so the jump back to the start of the loop happens while it's already
+   invisible — reads as a continuous drift that wraps in from the right. */
+@keyframes cloud-drift {
+  0% { transform: translateX(35vw); }
+  100% { transform: translateX(-135vw); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cloud { animation: none; }
+}
 
 .hero-title {
   position: relative;
