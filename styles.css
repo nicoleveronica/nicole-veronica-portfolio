@@ -44,7 +44,7 @@ a { color: inherit; }
   color: var(--nav-blue);
   text-transform: uppercase;
 }
-.nav-name { font-size: clamp(14px, 1.6vw, 22px); }
+.nav-name { font-size: clamp(16px, 1.9vw, 24px); }
 .nav-links { display: flex; gap: clamp(20px, 3vw, 44px); }
 .nav-links a {
   text-decoration: none;
