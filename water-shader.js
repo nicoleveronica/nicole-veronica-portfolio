@@ -347,7 +347,12 @@ struct VsOut {
         // of ending visibly on-screen. The extension and the container
         // grow by the same fraction of TENDRIL_W, so the scale (px per
         // SVG unit) stays identical to the mask's and alignment holds.
-        var STROKE_EXT_FRACTION = 0.2;
+        // Kept just large enough to clear the displacement jaggedness
+        // (feDisplacementMap scale 12) with room to spare — not the
+        // much bigger margin this used to carry, since real iOS Safari
+        // can let a pinch-zoom-out gesture reach past the clipping
+        // ancestor and expose whatever hangs off each edge here.
+        var STROKE_EXT_FRACTION = 0.05;
         var strokeExt = TENDRIL_W * STROKE_EXT_FRACTION;
         var extendedStrokeD = strokeD;
         var startMatch = strokeD.match(/^M\s*(-?[\d.]+)[ ,]+(-?[\d.]+)/);
