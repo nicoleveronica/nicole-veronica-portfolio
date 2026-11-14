@@ -546,9 +546,49 @@ a { color: inherit; }
 }
 .bottle-modal-close:hover { color: var(--red); }
 .bottle-anim {
+  position: relative;
   width: 100%;
   aspect-ratio: 671 / 860;
 }
+/* Hit areas sized/positioned as a % of the 671x860 artwork, so they
+   track the LinkedIn/Behance/email graphics baked into the Lottie at
+   any rendered size. Disabled until .bottle-anim.is-ready (set once
+   the unroll finishes) so nothing is clickable while the paper still
+   looks rolled up. */
+.bottle-link {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  pointer-events: none;
+}
+.bottle-anim.is-ready .bottle-link { pointer-events: auto; }
+.bottle-link--linkedin { left: 36.34%; top: 37.48%; width: 32.94%; height: 9.07%; }
+.bottle-link--behance { left: 36.22%; top: 57.25%; width: 32.94%; height: 9.07%; }
+.bottle-link--email { left: 34.22%; top: 74.00%; width: 36.66%; height: 13.49%; }
+.bottle-email-toast {
+  position: absolute;
+  z-index: 2;
+  left: 52.55%;
+  top: 72%;
+  transform: translate(-50%, -100%);
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(11px, 3vw, 14px);
+  padding: 5px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.bottle-email-toast.is-visible { opacity: 1; }
 
 /* ---------- GRAIN OVERLAY ---------- */
 /* A uniform fine paper-grain, laid over the whole page the same way it

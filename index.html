@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
 <!-- Bump the ?v= below whenever styles.css/water-shader.js/script.js change — browsers (esp. over plain http.server, which sends no cache-control headers) otherwise keep serving a stale cached copy after a deploy. -->
-<link rel="stylesheet" href="styles.css?v=20261114w">
+<link rel="stylesheet" href="styles.css?v=20261114y">
 </head>
 <body>
 
@@ -161,7 +161,23 @@
   <div class="bottle-modal-backdrop" data-bottle-close></div>
   <div class="bottle-modal-panel" role="dialog" aria-modal="true" aria-label="Message in a bottle">
     <button type="button" class="bottle-modal-close" data-bottle-close aria-label="Close">&times;</button>
-    <div class="bottle-anim" id="bottleAnim"></div>
+    <div class="bottle-anim" id="bottleAnim">
+      <!-- Invisible hit areas laid over the LinkedIn/Behance/email
+           graphics baked into the Lottie itself, at the exact
+           left/top/width/height (as % of the 671x860 artwork) those
+           layers sit at in bottle-unroll.json. Disabled (see script.js)
+           until the paper finishes unrolling. -->
+      <a class="bottle-link bottle-link--linkedin" href="https://sg.linkedin.com/in/nicole-veronica" target="_blank" rel="noopener noreferrer">
+        <span class="visually-hidden">Open Nicole's LinkedIn profile</span>
+      </a>
+      <a class="bottle-link bottle-link--behance" href="https://www.behance.net/nicole-veronica" target="_blank" rel="noopener noreferrer">
+        <span class="visually-hidden">Open Nicole's Behance profile</span>
+      </a>
+      <button type="button" class="bottle-link bottle-link--email" data-copy-email="nicoleveronica.su@gmail.com">
+        <span class="visually-hidden">Copy Nicole's email address</span>
+      </button>
+      <span class="bottle-email-toast" id="bottleEmailToast" aria-live="polite">Copied!</span>
+    </div>
   </div>
 </div>
 
@@ -169,6 +185,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/lottie-web@5.12.2/build/player/lottie.min.js"></script>
 <script src="water-shader.js?v=20261109h"></script>
-<script src="script.js?v=20261109b"></script>
+<script src="script.js?v=20261114b"></script>
 </body>
 </html>

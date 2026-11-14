@@ -73,6 +73,8 @@
     var modal = document.getElementById("bottleModal");
     var animEl = document.getElementById("bottleAnim");
     var closeTargets = modal ? modal.querySelectorAll("[data-bottle-close]") : [];
+    var emailBtn = document.querySelector(".bottle-link--email");
+    var emailToast = document.getElementById("bottleEmailToast");
     if (!trigger || !modal || !animEl || typeof lottie === "undefined") return;
 
     var anim = lottie.loadAnimation({
@@ -80,10 +82,19 @@
       renderer: "svg",
       loop: false,
       autoplay: false,
-      path: "images/fishing/bottle-unroll.json",
+      path: "images/fishing/bottle-unroll.json?v=20261114a",
+    });
+
+    // The LinkedIn/Behance/email hit areas sit on top of the paper at
+    // all times, but the paper only looks unrolled (readable) once the
+    // animation finishes — so they stay inert until then, instead of
+    // being clickable while it still looks rolled up.
+    anim.addEventListener("complete", function () {
+      animEl.classList.add("is-ready");
     });
 
     var lastFocused = null;
+    var toastTimer = null;
 
     function onKeydown(e) {
       if (e.key === "Escape") closeModal();
@@ -92,8 +103,10 @@
     function openModal() {
       lastFocused = document.activeElement;
       modal.classList.add("is-open");
+      animEl.classList.remove("is-ready");
       if (reduceMotion) {
         anim.goToAndStop(anim.totalFrames - 1, true);
+        animEl.classList.add("is-ready");
       } else {
         anim.goToAndPlay(0, true);
       }
@@ -112,6 +125,22 @@
     closeTargets.forEach(function (el) {
       el.addEventListener("click", closeModal);
     });
+
+    if (emailBtn) {
+      emailBtn.addEventListener("click", function () {
+        var email = emailBtn.getAttribute("data-copy-email");
+        navigator.clipboard.writeText(email).then(function () {
+          if (!emailToast) return;
+          emailToast.classList.add("is-visible");
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(function () {
+            emailToast.classList.remove("is-visible");
+          }, 1600);
+        }).catch(function () {
+          /* clipboard permission denied or unavailable; nothing to show */
+        });
+      });
+    }
   })();
 
 })();
