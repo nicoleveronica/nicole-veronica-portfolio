@@ -342,18 +342,21 @@ struct VsOut {
       if (strokeD) {
         // Continue the path in a straight line well past each end, then
         // widen the viewBox (and the container + filter region, by the
-        // same fraction) to match — so the stroke's actual terminus sits
+        // same amount) to match — so the stroke's actual terminus sits
         // outside the viewport and only ever gets clipped by it, instead
-        // of ending visibly on-screen. The extension and the container
-        // grow by the same fraction of TENDRIL_W, so the scale (px per
-        // SVG unit) stays identical to the mask's and alignment holds.
-        // Kept just large enough to clear the displacement jaggedness
-        // (feDisplacementMap scale 12) with room to spare — not the
-        // much bigger margin this used to carry, since real iOS Safari
-        // can let a pinch-zoom-out gesture reach past the clipping
-        // ancestor and expose whatever hangs off each edge here.
-        var STROKE_EXT_FRACTION = 0.05;
-        var strokeExt = TENDRIL_W * STROKE_EXT_FRACTION;
+        // of ending visibly on-screen. Each side is kept just large
+        // enough to clear the displacement jaggedness (feDisplacementMap
+        // scale 12) with a little room to spare, not the much bigger
+        // margin this used to carry — real iOS Safari can let a
+        // pinch-zoom-out gesture reach past the clipping ancestor and
+        // expose whatever hangs off each edge here. The right side gets
+        // less margin than the left: that's the end users actually
+        // zoom out and notice, so it's trimmed closer to the minimum
+        // the jaggedness needs.
+        var STROKE_EXT_START_FRACTION = 0.05;
+        var STROKE_EXT_END_FRACTION = 0.015;
+        var strokeExtStart = TENDRIL_W * STROKE_EXT_START_FRACTION;
+        var strokeExtEnd = TENDRIL_W * STROKE_EXT_END_FRACTION;
         var extendedStrokeD = strokeD;
         var startMatch = strokeD.match(/^M\s*(-?[\d.]+)[ ,]+(-?[\d.]+)/);
         var endMatch = strokeD.match(/(-?[\d.]+)[ ,]+(-?[\d.]+)\s*$/);
@@ -361,14 +364,14 @@ struct VsOut {
           var startX = parseFloat(startMatch[1]), startY = parseFloat(startMatch[2]);
           var endX = parseFloat(endMatch[1]), endY = parseFloat(endMatch[2]);
           extendedStrokeD =
-            "M" + (startX - strokeExt) + " " + startY +
+            "M" + (startX - strokeExtStart) + " " + startY +
             "L" + strokeD.slice(1) +
-            "L" + (endX + strokeExt) + " " + endY;
+            "L" + (endX + strokeExtEnd) + " " + endY;
         }
-        var strokeViewW = TENDRIL_W + 2 * strokeExt;
+        var strokeViewW = TENDRIL_W + strokeExtStart + strokeExtEnd;
         var strokeSvg =
-          '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="' + -strokeExt + " 0 " + strokeViewW + " " + totalH + '">' +
-          '<defs><filter id="torn" x="' + -strokeExt + '" y="0" width="' + strokeViewW + '" height="' + TENDRIL_H + '" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">' +
+          '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="' + -strokeExtStart + " 0 " + strokeViewW + " " + totalH + '">' +
+          '<defs><filter id="torn" x="' + -strokeExtStart + '" y="0" width="' + strokeViewW + '" height="' + TENDRIL_H + '" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">' +
           '<feTurbulence type="fractalNoise" baseFrequency="0.25 0.25" numOctaves="3" seed="2782"/>' +
           '<feDisplacementMap in="SourceGraphic" scale="12" xChannelSelector="R" yChannelSelector="G"/>' +
           "</filter></defs>" +
@@ -378,9 +381,10 @@ struct VsOut {
         var strokeUrl = URL.createObjectURL(strokeBlob);
         var prevStrokeUrl = currentStrokeUrl;
         currentStrokeUrl = strokeUrl;
-        var extPct = STROKE_EXT_FRACTION * 100;
-        strokeContainer.style.left = -extPct + "%";
-        strokeContainer.style.width = (100 + 2 * extPct) + "%";
+        var extStartPct = STROKE_EXT_START_FRACTION * 100;
+        var extEndPct = STROKE_EXT_END_FRACTION * 100;
+        strokeContainer.style.left = -extStartPct + "%";
+        strokeContainer.style.width = (100 + extStartPct + extEndPct) + "%";
         strokeContainer.style.backgroundImage = 'url("' + strokeUrl + '")';
         strokeContainer.style.backgroundSize = "100% 100%";
         strokeContainer.style.backgroundRepeat = "no-repeat";
