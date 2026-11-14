@@ -62,7 +62,7 @@ a { color: inherit; }
   justify-content: space-between;
   align-items: center;
   gap: clamp(10px, 3vw, 24px);
-  padding: clamp(14px, 3vw, 48px) clamp(16px, 4vw, 56px);
+  padding: clamp(7px, 1.5vw, 24px) clamp(16px, 4vw, 56px);
   font-family: var(--font-display);
   color: var(--nav-blue);
   text-transform: uppercase;
