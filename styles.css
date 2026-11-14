@@ -229,7 +229,7 @@ a { color: inherit; }
 }
 .postcard-columns {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: 1fr 1.3fr;
   gap: clamp(10px, 4cqw, 40px);
   height: 100%;
 }
