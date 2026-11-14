@@ -9,14 +9,12 @@
   --water-deep: #4D7AA8;
   --water-light: #8FB8DE;
   --water-highlight: #EDF9FF;
-  --sand-ink: #A08565;
   --ground-brown: #8A6A3C;
   --ground-brown-deep: #5C4423;
   --postcard-ink: #38526E;
   --postcard-stripe-blue: #4A6DA3;
   --font-display: "Darumadrop One", "Comic Sans MS", cursive;
   --font-hand: "Caveat", "Comic Sans MS", cursive;
-  --font-lacquer: "Lacquer", "Comic Sans MS", cursive;
   --font-body: "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --max: 1400px;
 }
@@ -323,50 +321,14 @@ a { color: inherit; }
   position: relative;
   padding: clamp(2px, 0.6vw, 10px) clamp(24px, 6vw, 80px) clamp(40px, 7vw, 90px);
 }
-.letter-quote {
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-}
-/* Textured fill, shared by the quote marks and the body text: a grain
-   pattern multiplied over the solid ink color, then clipped to the
-   glyphs themselves — so the letters read as sand-textured rather
-   than a flat color with the page's own grain overlay simply passing
-   over the top of them. */
-.letter-mark,
-.letter-text {
-  color: var(--sand-ink);
-  background-color: var(--sand-ink);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 90px 90px;
-  background-blend-mode: multiply;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
-/* Krungthep is a macOS system font with no Google Fonts equivalent —
-   it renders as designed only for visitors on a Mac that has it
-   installed; everyone else falls back to the cursive stack below. */
-.letter-mark {
-  font-family: "Krungthep", var(--font-hand);
-  font-weight: 400;
-  line-height: 1;
-  font-size: clamp(26px, 4.4vw, 56px);
-}
-.letter-mark--open { margin-bottom: clamp(10px, 2.2vw, 28px); }
-.letter-mark--close {
-  align-self: flex-end;
-  margin-top: clamp(10px, 2.2vw, 28px);
-}
-.letter-text {
-  margin: 0;
-  font-family: var(--font-lacquer);
-  font-weight: 400;
-  text-transform: uppercase;
-  font-size: clamp(30px, 4.8vw, 58px);
-  line-height: 2;
-  letter-spacing: 0.01em;
+/* A flattened export rather than live text (see the comment in the
+   markup) — sized purely by width with height:auto, so it scales
+   down smoothly at any viewport including phone, same as the other
+   illustration assets on the page. */
+.letter-quote-img {
+  display: block;
+  width: min(100%, 900px);
+  height: auto;
 }
 
 /* ---------- WORKS ---------- */
