@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Caveat:wght@500;700&family=Lacquer&display=swap" rel="stylesheet">
 <!-- Bump the ?v= below whenever styles.css/water-shader.js/script.js change — browsers (esp. over plain http.server, which sends no cache-control headers) otherwise keep serving a stale cached copy after a deploy. -->
-<link rel="stylesheet" href="styles.css?v=20261114f">
+<link rel="stylesheet" href="styles.css?v=20261114i">
 </head>
 <body>
 
@@ -118,9 +118,13 @@
 <div class="water-sand-edge-wrap" aria-hidden="true"></div>
 
 <section class="letter" id="letter">
-  <p class="letter-text">&ldquo;Good design<br>
-    is like the tide ~<br>
-    you only notice it when it&rsquo;s gone.&rdquo;</p>
+  <blockquote class="letter-quote">
+    <span class="letter-mark letter-mark--open" aria-hidden="true">&ldquo;</span>
+    <p class="letter-text">Good design<br>
+      is like the tide ~<br>
+      you only notice it when it&rsquo;s gone.</p>
+    <span class="letter-mark letter-mark--close" aria-hidden="true">&rdquo;</span>
+  </blockquote>
   <!-- Beach towels go here once the real SVGs are in — same slow
        left-drift as .cloud, dropped in as their own scroll track. -->
 </section>
