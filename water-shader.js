@@ -340,15 +340,19 @@ struct VsOut {
       if (prevUrl) URL.revokeObjectURL(prevUrl);
 
       if (strokeD) {
-        // No overshoot: the stroke ends exactly where its own path data
-        // ends, inside the TENDRIL_W box, instead of being deliberately
-        // extended past the edge and left for the parent to clip. The
-        // raw path (water-sand-edge.svg) already starts/ends a little
-        // inset from 0/TENDRIL_W on its own, so this still reads as a
-        // clean torn edge with no visible flat cutoff — and with zero
-        // overshoot there's nothing left for a pinch-zoom-out gesture on
-        // real iOS Safari to expose if it ever reaches past the clip.
-        var STROKE_EXT_FRACTION = 0;
+        // Continue the path in a straight line well past each end, then
+        // widen the viewBox (and the container + filter region, by the
+        // same fraction) to match — so the stroke's actual terminus sits
+        // outside the viewport and only ever gets clipped by it, instead
+        // of ending visibly on-screen. The extension and the container
+        // grow by the same fraction of TENDRIL_W, so the scale (px per
+        // SVG unit) stays identical to the mask's and alignment holds.
+        // Kept just large enough to clear the displacement jaggedness
+        // (feDisplacementMap scale 12) with room to spare — not the
+        // much bigger margin this used to carry, since real iOS Safari
+        // can let a pinch-zoom-out gesture reach past the clipping
+        // ancestor and expose whatever hangs off each edge here.
+        var STROKE_EXT_FRACTION = 0.05;
         var strokeExt = TENDRIL_W * STROKE_EXT_FRACTION;
         var extendedStrokeD = strokeD;
         var startMatch = strokeD.match(/^M\s*(-?[\d.]+)[ ,]+(-?[\d.]+)/);
