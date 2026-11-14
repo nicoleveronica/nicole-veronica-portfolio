@@ -12,7 +12,10 @@
   --sand-ink: #A08565;
   --ground-brown: #8A6A3C;
   --ground-brown-deep: #5C4423;
+  --postcard-ink: #38526E;
+  --postcard-stripe-blue: #4A6DA3;
   --font-display: "Darumadrop One", "Comic Sans MS", cursive;
+  --font-hand: "Caveat", "Comic Sans MS", cursive;
   --font-body: "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --max: 1400px;
 }
@@ -180,6 +183,13 @@ a { color: inherit; }
   position: relative;
   width: clamp(260px, 56.24vw, 1080px);
   margin: 0 auto;
+  /* Everything inside the postcard is sized in cqw (percent of the
+     card's own rendered width) instead of vw, so the whole layout —
+     text included — scales as one proportional unit with the card at
+     any width, the same way the reference art was proportioned at a
+     single fixed size. That's also why phone just needs it to shrink
+     to fit: there's no separate mobile type scale to maintain. */
+  container-type: inline-size;
 }
 .starfish-big {
   position: absolute;
@@ -190,45 +200,90 @@ a { color: inherit; }
   top: -7%;
   filter: drop-shadow(0 14px 18px rgba(0,0,0,0.2));
 }
+/* The red/blue border is a flat diagonal dash pattern clipped by the
+   white inner card sitting on top of it (like a picture frame) — the
+   reference art keeps the same dash angle across all four edges
+   rather than bending around the corners, which a border-image (the
+   previous approach here) can't reproduce. */
 .postcard {
+  --postcard-border: clamp(8px, 2.86cqw, 34px);
   position: relative;
   z-index: 2;
   width: 100%;
   aspect-ratio: 1083 / 761;
-  background: #fff;
-  padding: clamp(28px, 4vw, 48px) clamp(28px, 5vw, 56px) clamp(60px, 7vw, 90px) clamp(70px, 13vw, 130px);
+  background-color: #fff;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--red) 0 calc(var(--postcard-border) * 2.35),
+    transparent calc(var(--postcard-border) * 2.35) calc(var(--postcard-border) * 3.7),
+    var(--postcard-stripe-blue) calc(var(--postcard-border) * 3.7) calc(var(--postcard-border) * 6.05),
+    transparent calc(var(--postcard-border) * 6.05) calc(var(--postcard-border) * 7.4)
+  );
   box-shadow: 0 24px 50px rgba(0,0,0,0.22);
-  overflow: hidden;
 }
-.postcard::before {
-  content: "";
+.postcard-inner {
   position: absolute;
-  inset: 0;
-  border: clamp(14px, 2.77vw, 30px) solid transparent;
-  border-image: repeating-linear-gradient(-45deg, #c23b3b 0 14px, #fff 14px 28px, #2e6fa8 28px 42px, #fff 42px 56px) 14;
-  pointer-events: none;
+  inset: var(--postcard-border);
+  background: #fff;
+  overflow: hidden;
+  padding: clamp(10px, 6.8cqw, 46px) clamp(10px, 6cqw, 42px) clamp(10px, 6.8cqw, 46px) clamp(14px, 8.6cqw, 68px);
+}
+.postcard-columns {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(10px, 4cqw, 40px);
+  height: 100%;
+}
+.postcard-col--left {
+  min-width: 0;
+  border-right: 1px solid rgba(0, 0, 0, 0.14);
+  padding-right: clamp(10px, 4cqw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 2.2cqw, 20px);
+}
+.postcard-col--right {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 .postcard-title {
-  margin: 0 0 18px;
+  margin: 0;
   font-family: var(--font-display);
   font-weight: 400;
   text-transform: uppercase;
   color: var(--red-deep);
-  font-size: clamp(26px, 3.4vw, 40px);
+  font-size: clamp(11px, 5cqw, 46px);
 }
 .postcard-body {
   margin: 0;
-  max-width: 56ch;
-  font-size: clamp(14px, 1.6vw, 17px);
-  line-height: 1.7;
-  color: #4a4a4a;
+  font-family: var(--font-hand);
+  font-weight: 500;
+  font-size: clamp(9px, 3.6cqw, 34px);
+  line-height: 1.2;
+  color: var(--postcard-ink);
 }
 .postcard-stamp {
-  position: absolute;
-  top: clamp(18px, 3vw, 30px);
-  right: clamp(18px, 3vw, 30px);
-  width: clamp(46px, 6vw, 68px);
+  display: block;
+  width: clamp(18px, 9cqw, 90px);
+  height: auto;
+  align-self: flex-end;
+  margin-bottom: clamp(6px, 2.6cqw, 24px);
 }
+.postcard-facts {
+  display: flex;
+  flex-direction: column;
+}
+.postcard-fact {
+  margin: 0;
+  padding: clamp(3px, 1.6cqw, 14px) 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  font-family: var(--font-hand);
+  font-weight: 500;
+  font-size: clamp(8px, 2.9cqw, 26px);
+  color: var(--postcard-ink);
+}
+.postcard-fact strong { font-weight: 700; }
 .postcard-shell {
   position: absolute;
   z-index: 3;
