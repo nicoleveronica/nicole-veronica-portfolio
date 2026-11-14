@@ -52,11 +52,11 @@ a { color: inherit; }
   text-transform: uppercase;
   background: var(--cream);
 }
-.nav-name { font-size: clamp(11px, 1.9vw, 24px); white-space: nowrap; }
+.nav-name { font-size: clamp(12px, 1.9vw, 24px); white-space: nowrap; }
 .nav-links { display: flex; gap: clamp(10px, 3vw, 44px); }
 .nav-links a {
   text-decoration: none;
-  font-size: clamp(11px, 1.9vw, 24px);
+  font-size: clamp(12px, 1.9vw, 24px);
 }
 .nav-links a:hover { color: var(--red); }
 
