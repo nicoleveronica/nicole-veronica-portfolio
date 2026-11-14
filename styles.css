@@ -300,7 +300,7 @@ a { color: inherit; }
   overflow: hidden;
   width: 100%;
   aspect-ratio: 1998.95 / 689.712;
-  margin: clamp(-70px, -9vw, -40px) 0 clamp(20px, 6vw, 100px);
+  margin: clamp(-70px, -9vw, -40px) 0 clamp(4px, 1vw, 16px);
   pointer-events: none;
 }
 /* The white torn-paper line is drawn from the exact same path data and
