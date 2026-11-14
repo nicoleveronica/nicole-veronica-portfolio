@@ -80,6 +80,7 @@ a { color: inherit; }
 .hero {
   position: relative;
   overflow: hidden;
+  overflow: clip;
   padding-bottom: clamp(40px, 6vw, 90px);
 }
 .hero-clouds { position: absolute; z-index: 0; inset: 0; pointer-events: none; }
@@ -196,6 +197,7 @@ a { color: inherit; }
   position: relative;
   padding: clamp(60px, 10vw, 140px) 24px clamp(100px, 12vw, 180px);
   overflow: hidden;
+  overflow: clip;
 }
 .postcard-stage {
   position: relative;
@@ -318,6 +320,7 @@ a { color: inherit; }
   z-index: 2;
   display: block;
   overflow: hidden;
+  overflow: clip;
   width: 100%;
   aspect-ratio: 1998.95 / 689.712;
   margin: clamp(-70px, -9vw, -40px) 0 clamp(4px, 1vw, 16px);
@@ -352,9 +355,16 @@ a { color: inherit; }
 }
 
 /* ---------- WORKS ---------- */
+/* overflow: clip (not just hidden) on this and the other section
+   wrappers that clip an intentionally-oversized decoration (the
+   clouds, the sea-stroke torn edge, this section's ocean-edge strip)
+   — plain overflow: hidden left a sliver of that decoration visible
+   on real iOS Safari once the page was pinch-zoomed out, even though
+   nothing was actually scrollable. */
 .works {
   position: relative;
   overflow: hidden;
+  overflow: clip;
   padding: clamp(60px, 9vw, 120px) clamp(24px, 6vw, 80px) clamp(80px, 10vw, 140px);
 }
 .works-title {
