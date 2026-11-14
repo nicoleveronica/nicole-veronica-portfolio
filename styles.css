@@ -39,18 +39,21 @@ a { color: inherit; }
 
 /* ---------- NAV ---------- */
 .nav {
-  position: relative;
-  z-index: 10;
+  position: sticky;
+  top: 0;
+  z-index: 40;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: clamp(20px, 3vw, 48px) clamp(20px, 4vw, 56px);
+  gap: clamp(10px, 3vw, 24px);
+  padding: clamp(14px, 3vw, 48px) clamp(16px, 4vw, 56px);
   font-family: var(--font-display);
   color: var(--nav-blue);
   text-transform: uppercase;
+  background: var(--cream);
 }
-.nav-name { font-size: clamp(16px, 1.9vw, 24px); }
-.nav-links { display: flex; gap: clamp(20px, 3vw, 44px); }
+.nav-name { font-size: clamp(11px, 1.9vw, 24px); white-space: nowrap; }
+.nav-links { display: flex; gap: clamp(10px, 3vw, 44px); }
 .nav-links a {
   text-decoration: none;
   font-size: clamp(16px, 1.9vw, 24px);
