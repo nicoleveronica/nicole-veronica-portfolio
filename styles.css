@@ -20,18 +20,29 @@
 }
 
 * { box-sizing: border-box; }
+/* overflow-x: hidden alone still lets iOS Safari's pinch-zoom reveal
+   laid-out content past the right edge (it only stops scrolling, not
+   the zoom gesture). overflow-x: clip additionally forbids any scroll
+   offset — including the one pinch-zoom tries to apply — so browsers
+   that support it (Safari 16+, all other modern browsers) can't pan
+   to that content at all. Older Safari ignores the unknown value and
+   falls back to the hidden line above it. */
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
+  max-width: 100%;
 }
 body {
   margin: 0;
   width: 100%;
+  max-width: 100%;
   background: var(--cream);
   font-family: var(--font-body);
   color: var(--ink);
   overflow-x: hidden;
+  overflow-x: clip;
 }
 img { max-width: 100%; display: block; }
 a { color: inherit; }
