@@ -239,7 +239,7 @@ a { color: inherit; }
   padding-right: clamp(10px, 4cqw, 40px);
   display: flex;
   flex-direction: column;
-  gap: clamp(6px, 2.2cqw, 20px);
+  gap: clamp(9px, 3cqw, 26px);
 }
 .postcard-col--right {
   min-width: 0;
@@ -248,6 +248,7 @@ a { color: inherit; }
 }
 .postcard-title {
   margin: 0;
+  margin-bottom: clamp(4px, 1.6cqw, 14px);
   font-family: var(--font-display);
   font-weight: 400;
   text-transform: uppercase;
